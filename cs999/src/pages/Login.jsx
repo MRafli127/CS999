@@ -5,8 +5,9 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Basic validation
@@ -15,10 +16,30 @@ const Login = ({ onLogin }) => {
       return;
     }
     
-    // In a real app, you would validate credentials against a backend
-    // For now, we'll simulate a successful login
-    console.log('Logging in with:', { email, password });
-    onLogin();
+    setLoading(true);
+    
+    try {
+      const response = await fetch('http://localhost:3000/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+      
+      // Successful login
+      onLogin(data.user, data.token);
+    } catch (err) {
+      setError(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,8 +91,12 @@ const Login = ({ onLogin }) => {
           </div>
 
           <div>
-            <button type="submit" className="submit-button">
-              Sign in
+            <button 
+              type="submit" 
+              className="submit-button" 
+              disabled={loading}
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>

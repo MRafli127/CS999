@@ -7,8 +7,9 @@ const Register = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Basic validation
@@ -22,10 +23,49 @@ const Register = ({ onLogin }) => {
       return;
     }
     
-    // In a real app, you would send this data to a backend
-    // For now, we'll simulate a successful registration
-    console.log('Registering user:', { name, email, password });
-    onLogin(); // Automatically log in after registration
+    setLoading(true);
+    
+    try {
+      const response = await fetch('http://localhost:3000/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          password
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+      
+      // If registration is successful, login
+      const loginResponse = await fetch('http://localhost:3000/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const loginData = await loginResponse.json();
+      
+      if (!loginResponse.ok) {
+        throw new Error(loginData.message || 'Login after registration failed');
+      }
+      
+      // Successful registration and login
+      onLogin(loginData.user, loginData.token);
+    } catch (err) {
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -109,8 +149,12 @@ const Register = ({ onLogin }) => {
           </div>
 
           <div>
-            <button type="submit" className="submit-button">
-              Register
+            <button 
+              type="submit" 
+              className="submit-button"
+              disabled={loading}
+            >
+              {loading ? 'Registering...' : 'Register'}
             </button>
           </div>
         </form>
