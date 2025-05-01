@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-100 min-h-screen;
+}
+
+.auth-container {
+  @apply flex min-h-screen flex-col justify-center items-center px-6 lg:px-8;
+}
+
+.auth-card {
+  @apply mt-10 sm:mx-auto sm:w-full sm:max-w-sm bg-white p-8 rounded-lg shadow-md;
+}
+
+.form-title {
+  @apply text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 mb-6;
+}
+
+.form-label {
+  @apply block text-sm font-medium leading-6 text-gray-900 mb-2;
+}
+
+.form-input {
+  @apply w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 mb-4;
+}
+
+.submit-button {
+  @apply w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+.link-text {
+  @apply font-medium text-indigo-600 hover:text-indigo-500;
+}
+
+.product-container {
+  @apply max-w-7xl mx-auto p-4 sm:px-6 lg:px-8;
+}
+
+.product-header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.product-grid {
+  @apply grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+.product-card {
+  @apply bg-white rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105;
+}
+
+.product-image {
+  @apply h-48 w-full object-cover;
+}
+
+.product-info {
+  @apply p-4;
+}
+
+.product-name {
+  @apply text-lg font-medium text-gray-900 mb-1;
+}
+
+.product-price {
+  @apply text-xl font-bold text-gray-900 mb-2;
+}
+
+.product-description {
+  @apply text-sm text-gray-500;
+}
